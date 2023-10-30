@@ -7,8 +7,8 @@ import {
   JoinTable,
 } from 'typeorm';
 import { IsString, IsUUID } from 'class-validator';
-import { Song } from '../songs/songs.entity';
-import { User } from '../users/users.entity';
+import { Song } from '@songs/songs.entity';
+import { User } from '@users/users.entity';
 
 @Entity()
 @ObjectType()

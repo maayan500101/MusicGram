@@ -1,6 +1,6 @@
-import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 
 enum Genre {
   pop = 'pop',

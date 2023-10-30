@@ -29,7 +29,9 @@
     "megajs": "^1.1.4",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
+    "tsconfig-paths": "^4.2.0",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "winston": "^3.11.0"
   }
 }

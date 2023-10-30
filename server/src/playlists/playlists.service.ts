@@ -1,4 +1,4 @@
-import { ORM } from '../ORM';
+import { ORM } from '@ORM';
 import { Playlist } from './playlists.entity';
 
 const PlaylistsRepo = ORM.getRepository(Playlist);

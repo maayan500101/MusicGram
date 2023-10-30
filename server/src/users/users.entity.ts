@@ -1,5 +1,4 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { UniqueFieldValidator } from '../services';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,8 +6,9 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { IsOptional, IsString, IsUUID, Validate } from 'class-validator';
-import { Playlist } from '../playlists/playlists.entity';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { UniqueFieldValidator } from '@services';
+import { Playlist } from '@playlists/playlists.entity';
 
 @Entity()
 @ObjectType()
@@ -19,9 +19,9 @@ export class User {
   @Field()
   id: string;
 
-  @Column()
+  @UniqueFieldValidator()
+  @Column({ unique: true })
   @IsString()
-  @UniqueFieldValidator(User)
   @Field()
   username: string;
 
@@ -35,18 +35,18 @@ export class User {
   playlists: Playlist[];
 }
 
+@ObjectType()
+export class Token {
+  @Field()
+  token: string;
+}
+
 @InputType()
-export class UserLogin extends User {
+export class UserInput {
   @IsString()
   @Field()
   username: string;
   @Field()
   @IsString()
   password: string;
-}
-
-@ObjectType()
-export class Token {
-  @Field()
-  token: String;
 }

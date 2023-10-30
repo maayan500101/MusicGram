@@ -1,5 +1,5 @@
 import { File } from 'megajs';
-import { ORM } from '../ORM';
+import { ORM } from '@ORM';
 import { Song } from './songs.entity';
 
 const SongsRepo = ORM.getRepository(Song);

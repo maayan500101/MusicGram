@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { ORM } from '../ORM';
+import { ORM } from '@ORM';
 
 @ValidatorConstraint({ async: true })
 export class UniqueOnDatabaseExistConstraint
@@ -13,15 +13,12 @@ export class UniqueOnDatabaseExistConstraint
 {
   async validate(value: any, args: ValidationArguments) {
     return ORM.getRepository(args.targetName)
-      .count({ [args.property]: value })
+      .count({ where: { [args.property]: value } })
       .then((count) => count < 1);
   }
 }
 
-export function UniqueFieldValidator(
-  entity: Function,
-  validationOptions?: ValidationOptions,
-) {
+export function UniqueFieldValidator(validationOptions?: ValidationOptions) {
   return function (object: Record<string, any>, propertyName: string) {
     validationOptions = {
       ...{ message: `${propertyName} must be unique` },

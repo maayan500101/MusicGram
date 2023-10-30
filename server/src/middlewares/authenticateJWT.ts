@@ -1,11 +1,12 @@
-import { isUUID } from 'class-validator';
 import { NextFunction, Response, Request } from 'express';
-import jwt, { VerifyCallback } from 'jsonwebtoken';
-import { User } from '../users/users.entity';
+import { VerifyCallback, verify, sign } from 'jsonwebtoken';
+import { isUUID } from 'class-validator';
+import logger from '@logger';
+import { httpStatus } from '@data';
+import { accessTokenSecret } from '@environment';
+import { User } from '@users/users.entity';
 
-const JWT_SECRET = 'TypeGraphQL';
-
-export type AuthenticateRequest = Request & { auth: User };
+export type AuthenticateRequestType = Request & { auth: User };
 
 export const authenticateJWT = (
   req: Request,
@@ -28,21 +29,22 @@ export const authenticateJWT = (
   if (authHeader) {
     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, JWT_SECRET, ((err, user: User) => {
+    verify(token, accessTokenSecret, ((err, user: User) => {
       if (err || !isUUID(user.id)) {
-        return res.sendStatus(403);
+        return res.sendStatus(httpStatus.FORBIDDEN);
       }
 
-      (req as AuthenticateRequest).auth = user;
+      (req as AuthenticateRequestType).auth = user;
       next();
     }) as VerifyCallback);
   } else {
-    res.sendStatus(401);
+    res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 };
 
 export const getToken = (user: User | null) => {
   if (user) {
-    return jwt.sign({ ...user }, JWT_SECRET);
+    logger.info('create token');
+    return sign({ ...user }, accessTokenSecret);
   } else return null;
 };
