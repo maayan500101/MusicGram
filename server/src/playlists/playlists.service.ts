@@ -16,3 +16,13 @@ export const getPlaylistsByUser = async (
     where: { users: { id: userId } },
   });
 };
+
+export const getPlaylistById = async (
+  findRelatedSongs: boolean,
+  id: string,
+) => {
+  return PlaylistsRepo.findOne({
+    relations: { songs: !!findRelatedSongs },
+    where: { id },
+  });
+};

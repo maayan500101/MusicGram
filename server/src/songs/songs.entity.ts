@@ -3,9 +3,10 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 
 enum Genre {
-  pop = 'pop',
-  rock = 'rock',
-  rap = 'rap',
+  pop = 'פופ',
+  rock = 'רוק',
+  rap = 'ראפ',
+  hiphop = 'היפ-הופ',
 }
 
 registerEnumType(Genre, {

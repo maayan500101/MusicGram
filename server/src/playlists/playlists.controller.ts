@@ -1,6 +1,10 @@
-import { Ctx, Info, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Info, Query, Resolver } from 'type-graphql';
 import { getRequestedFields } from '@services';
-import { getPlaylists, getPlaylistsByUser } from './playlists.service';
+import {
+  getPlaylistById,
+  getPlaylists,
+  getPlaylistsByUser,
+} from './playlists.service';
 import { Playlist } from './playlists.entity';
 
 const RELATED_SONG_COLUMNS = ['songs', 'numOfSongs'];
@@ -23,6 +27,16 @@ export class PlaylistResolver {
     return await getPlaylistsByUser(
       requestedFields.some((field) => RELATED_SONG_COLUMNS.includes(field)),
       ctx.user.id,
+    );
+  }
+
+  @Query((_returns) => Playlist)
+  async playlistsById(@Arg('id') id: string, @Info() info: any) {
+    const requestedFields: string[] = getRequestedFields(info);
+
+    return await getPlaylistById(
+      requestedFields.some((field) => RELATED_SONG_COLUMNS.includes(field)),
+      id,
     );
   }
 }

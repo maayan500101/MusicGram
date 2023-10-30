@@ -4,7 +4,7 @@ import logger from '@logger';
 
 export const ORM = new DataSource({
   type: 'postgres',
-  entities: [__dirname + '/**/*.{entity}{.ts,.js}'],
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
   ...ORM_CONNECTION,
 });
 
