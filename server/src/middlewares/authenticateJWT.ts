@@ -16,7 +16,7 @@ export const authenticateJWT = (
   const queryPath = req.query.query;
 
   if (
-    !Object.values(req.query).length ||
+    (req.method === 'GET' && !Object.values(req.query).length) ||
     (typeof queryPath === 'string' &&
       (queryPath.includes('loginUser') || queryPath.includes('createUser')))
   ) {
