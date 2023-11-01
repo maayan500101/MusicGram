@@ -37,8 +37,8 @@ export class User {
 
 @ObjectType()
 export class Token {
-  @Field()
-  token: string;
+  @Field((_type) => String, { nullable: true })
+  token: string | null;
 }
 
 @InputType()

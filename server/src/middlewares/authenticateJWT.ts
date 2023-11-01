@@ -13,10 +13,10 @@ export const authenticateJWT = (
   res: Response,
   next: NextFunction,
 ) => {
-  const queryPath = req.query.query;
+  const queryPath = req?.body?.query;
 
   if (
-    (req.method === 'GET' && !Object.values(req.query).length) ||
+    !queryPath ||
     (typeof queryPath === 'string' &&
       (queryPath.includes('loginUser') || queryPath.includes('createUser')))
   ) {
