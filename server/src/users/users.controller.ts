@@ -1,7 +1,8 @@
-import { Arg, Info, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Info, Mutation, Query, Resolver } from 'type-graphql';
 import { getRequestedFields } from '@services/get-requested-fields';
 import { User, Token, UserInput } from './users.entity';
 import { getUsers, findUser, createUser } from './users.service';
+import { Response } from 'express';
 
 @Resolver()
 export class UserResolver {
@@ -13,8 +14,14 @@ export class UserResolver {
   }
 
   @Mutation((_return) => Token)
-  async loginUser(@Arg('data') userInput: UserInput) {
-    return { token: await findUser(userInput) };
+  async loginUser(
+    @Arg('data') userInput: UserInput,
+    @Ctx() { res }: { res: Response },
+  ) {
+    const token = await findUser(userInput);
+    res.cookie('token', token as string);
+
+    return { token };
   }
 
   @Mutation((_return) => Token)

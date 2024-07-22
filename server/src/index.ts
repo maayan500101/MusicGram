@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import express, { Request } from 'express';
 import { graphqlHTTP } from 'express-graphql';
+import cookieParser from 'cookie-parser';
 import { ASTNode, GraphQLError, getOperationAST, print } from 'graphql';
 import bodyParser from 'body-parser';
 import { HOST, PORT } from '@environment';
@@ -20,6 +21,7 @@ const GRAPHQL_PATH = '/graphql';
 const app = express();
 
 app.use(logRequest);
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 const bootstrap = async () => {
@@ -28,7 +30,7 @@ const bootstrap = async () => {
   app.use(
     GRAPHQL_PATH,
     authenticateJWT,
-    graphqlHTTP((req) => ({
+    graphqlHTTP((req, res) => ({
       extensions({ document, operationName }) {
         const operation = getOperationAST(document, operationName);
         const operationString = print(operation as ASTNode);
@@ -44,7 +46,7 @@ const bootstrap = async () => {
       },
       schema,
       graphiql: true,
-      context: { user: (req as AuthenticateRequestType).auth },
+      context: { user: (req as AuthenticateRequestType).auth, res },
     })),
   );
 };

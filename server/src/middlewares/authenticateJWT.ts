@@ -16,19 +16,16 @@ export const authenticateJWT = (
   const queryPath = req?.body?.query;
 
   if (
-    !queryPath ||
-    (typeof queryPath === 'string' &&
-      (queryPath.includes('loginUser') || queryPath.includes('createUser')))
+    typeof queryPath === 'string' &&
+    (queryPath.includes('loginUser') || queryPath.includes('createUser'))
   ) {
     next();
     return;
   }
 
-  const authHeader = req.headers.authorization;
+  const token = req.cookies.token;
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-
+  if (token) {
     verify(token, accessTokenSecret, ((err, user: User) => {
       if (err || !isUUID(user.id)) {
         return res.sendStatus(httpStatus.FORBIDDEN);
@@ -38,7 +35,7 @@ export const authenticateJWT = (
       next();
     }) as VerifyCallback);
   } else {
-    res.sendStatus(httpStatus.UNAUTHORIZED);
+    res.status(httpStatus.OK).send('Unauthorized user');
   }
 };
 

@@ -2,6 +2,8 @@ import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { ORM } from '@ORM';
 import { getToken } from '@middlewares';
+import { httpStatus } from '@data';
+import { CustomError } from 'customError';
 import { User, UserInput } from './users.entity';
 
 const UserRepo = ORM.getRepository(User);
@@ -12,6 +14,8 @@ export const getUsers = async (findRelatedPlaylists: boolean) => {
 
 export const findUser = async ({ username, password }: Partial<User>) => {
   const user = await UserRepo.findOne({ where: { username, password } });
+
+  if (!user) throw new CustomError('Not found user', httpStatus.NOT_FOUND);
 
   return getToken(user);
 };
